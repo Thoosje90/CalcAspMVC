@@ -115,6 +115,10 @@ function showMemory() {
     $('#memoryModal').modal('show');
 }
 
+function hideMemory() {
+    $('#memoryModal').modal('hide');
+}
+
 // Populate MemoryStore Modal
 function updateMemoryList(previousCalculations) {
 
