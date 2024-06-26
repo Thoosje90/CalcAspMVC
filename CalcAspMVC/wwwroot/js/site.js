@@ -132,9 +132,9 @@ function updateMemoryList(previousCalculations) {
         var listItem = `<li class="list-group-item d-flex justify-content-between align-items-center">
                                     ${calculation}
                                     <span>
-                                    <button type="button" class="dynamic_button btn btn-danger btn-sm" value="${index}" data-action="MemoryClear">MC</button>
-                                    <button type="button" class="dynamic_button btn btn-success btn-sm" value="${index}" data-action="MemoryAdd">M+</button>
-                                    <button type="button" class="dynamic_button btn btn-warning btn-sm" value="${index}" data-action="MemorySubstract">M-</button>
+                                    <button type="button" class="dynamic_button btn btn-danger" value="${index}" data-action="MemoryClear">MC</button>
+                                    <button type="button" class="dynamic_button btn btn-success" value="${index}" data-action="MemoryAdd">M+</button>
+                                    <button type="button" class="dynamic_button btn btn-warning" value="${index}" data-action="MemorySubstract">M-</button>
                                     </span>
                                 </li>`;
 
