@@ -1,0 +1,188 @@
+
+
+/* Resize for tablet screens */
+@media screen and (max-width: 1024px) {
+
+    .calculator {
+        width: 100% !important;
+        position: absolute !important;
+        top: 0;
+        left: 0;
+    }
+}
+
+/* Resize Fontstyles for smaller screens */
+@media screen and (max-width: 720px) {
+
+    .calc button {
+        font-size: 16px !important;
+        height: 10px;
+    }
+
+    .calc h3 {
+        font-size: 28px !important;
+        font-weight: 700;
+        color: var(--text);
+    }
+}
+
+/* Resize for phone screens */
+@media screen and (max-width: 492px) {
+
+    .calc {
+        width: 100% !important;
+    }
+}
+
+/* Display style for calculator */
+#display {
+    cursor: grabbing;
+    font-size: 30px;
+    font-weight: bolder;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 60px;
+    color: var(--coltext);
+    background: var(--colbg);
+    border-radius: 5px;
+    border-bottom: 4px solid var(--border);
+    margin: 6px 10px 6px 10px;
+}
+
+/* Create shadow for button focus */
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+/* Dark Mode styles for calculator */
+body.dark-mode {
+    --background: #3B4664;
+    --outputbg: #181F32;
+    --outputtext: white;
+    --text: #EAE3DB;
+    --coltext: #50525D;
+    --colbg: #EAE3DB;
+    --border: #B2A296;
+    --del: #A2B3E1;
+    --equal: #F96C5B;
+    --calcbodybg: #252D44;
+    --equaltext: white;
+}
+
+/* Light Mode styles for calculator */
+body.light-mode {
+    --background: #E6E6E6;
+    --outputbg: #EEEEEE;
+    --outputtext: black;
+    --text: black;
+    --coltext: black;
+    --colbg: #E5E4E0;
+    --border: #A79E90;
+    --del: #62B5BD;
+    --equal: #FF8B38;
+    --calcbodybg: #D3CDCD;
+    --equaltext: white;
+}
+
+/* Calculator default style */
+.calculator {
+    background: var(--background);
+    color: var(--text);
+    overflow-x: hidden;
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    border-radius:0 !important;
+}
+
+/* Calculator div default style */
+.calc {
+    width: 90%;
+}
+
+/* Calculator H3 default style */
+.calc h3 {
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+/* Calculator Button style */
+.calc button {
+    cursor: grabbing;
+    font-size: 30px;
+    font-weight: bolder;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 60px;
+    color: var(--coltext);
+    border-radius: 5px;
+    border-bottom: 4px solid var(--border);
+    margin: 6px 10px 6px 10px;
+}
+
+.calcAlert {
+    margin: 6px 10px 6px 10px;
+}
+
+/* Calculator Equal Button style */
+.equal {
+    color: var(--equaltext) !important;
+    background: #F96C5B !important;
+    border-bottom: 4px solid var(--equal);
+}
+
+/* Calculator default style */
+.num .row .col p {
+    cursor: grabbing;
+    font-size: 30px;
+    font-weight: bolder;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 60px;
+    color: var(--coltext);
+    background: var(--colbg);
+    border-radius: 5px;
+    border-bottom: 4px solid var(--border);
+}
+
+/* Calculator delete button inherited style */
+.num .row .col .del {
+    color: #FEFFFE;
+    background: var(--del) !important;
+    border-bottom: 4px solid var(--del);
+}
+
+/* Calculator equal button inherited style */
+.num .row .col .equal {
+    color: var(--equaltext);
+    background: var(--equal);
+    border-bottom: 4px solid var(--equal);
+}
+
+/* Custom styles for bottom modal */
+.modal-dialog-bottom {
+    position: fixed;
+    bottom: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Remove border radius from popup modal */
+.modal-dialog-bottom .modal-content {
+    border-radius: 0;
+}
+
+/* Adjusting modal width */
+.modal-dialog-centered {
+    display: flex;
+    align-items: flex-end;
+}
