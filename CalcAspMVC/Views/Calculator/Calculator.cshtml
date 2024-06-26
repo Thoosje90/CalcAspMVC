@@ -219,6 +219,7 @@
                 // Update/Populate the memodyModal
                 updateMemoryList(response.calculations.reverse());
 
+                // Show Error Alert when result is not empty
                 if (response.result != "") {
                     $('#result').text(response.result);
                     $('#result').show();
