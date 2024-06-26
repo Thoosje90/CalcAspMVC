@@ -56,6 +56,14 @@
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
+.list {
+    overflow-y: auto;
+    position: inherit;
+    top: 0;
+    bottom: 0;
+    max-height:500px;
+}
+
 /* Dark Mode styles for calculator */
 body.dark-mode {
     --background: #3B4664;
