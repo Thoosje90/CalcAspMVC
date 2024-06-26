@@ -69,7 +69,9 @@
                 <div class="btn-group d-flex" role="group">
                     <button type="button" class="btn btn-light border" onclick="addToDisplay('0')">0</button>
                     <button type="button" class="btn btn-light border" onclick="addToDisplay('.')">.</button>
+                    <button type="button" class="btn btn-light border popupBtn" onclick="removeFromDisplay()"><i class="bi bi-backspace fa-xs" style="font-size:24px;"></i></button>
                     <button type="button" class="btn equal border" data-action="Calculate">=</button>
+
                 </div>
               
             </div>
@@ -158,6 +160,19 @@
         $('#result').hide();
         
     }
+
+    // Remove last digit from Display
+    function removeFromDisplay() {
+
+        // Get value from display
+        var str = $("#display").val();
+        // Remove last charactor from string
+        str = str.substring(0, str.length - 1);
+        // Update display
+        $("#display").val(str);
+
+    }
+
 
 </script>
 
