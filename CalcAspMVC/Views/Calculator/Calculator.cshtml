@@ -185,7 +185,7 @@
         // Get action from form button (if any)
         var action = control.data('action');
         // Create a POST url using based the users action
-        var url = '@Url.Action("PlaceHolder", "Calculator")'.replace('PlaceHolder', action);
+        let url = '@Url.Action("PlaceHolder", "Calculator")'.replace('PlaceHolder', action);
         if (action == null) {
             return;
         }

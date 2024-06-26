@@ -123,7 +123,7 @@ function updateMemoryList(previousCalculations) {
     memoryList.empty();
 
     // Keep track of current index
-    var index = 0;
+    var index = previousCalculations.length - 1;
 
     // Create new Div Element for each entry in MemoryStore
     previousCalculations.forEach(function (calculation) {
@@ -141,6 +141,6 @@ function updateMemoryList(previousCalculations) {
         // Append Html Template to MemoryStore Modal
         memoryList.append(listItem);
         // Update index
-        index++;
+        index--;
     });
 }
