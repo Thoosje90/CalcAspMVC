@@ -2,6 +2,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+// Add AntiForgeryToken for Preventing Cross-Site Request Forgery 
 builder.Services.AddAntiforgery(options => options.HeaderName = "RequestVerificationToken");
 // Add Httpcontext Processor to use sessions in controllers
 builder.Services.AddHttpContextAccessor();
