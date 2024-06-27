@@ -24,6 +24,12 @@
         font-weight: 700;
         color: var(--text);
     }
+
+    .list {
+        max-height: 500px;
+        height: 53vh !important;
+    }
+
 }
 
 /* Resize for phone screens */

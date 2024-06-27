@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace CalcAspMVC.Controllers
@@ -29,12 +30,14 @@ namespace CalcAspMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Calculate([FromBody] Models.CalculatorModel model)
         {
-            // Get User Session
-            ISession session = _httpContextAccessor.HttpContext.Session;
+            // Validate Model
+            if (model == null)
+                return DefaultJsonObject();
 
             // Check for Zero Division
             if (IsDividingByZero(model.Expression))
             {
+                // Totally unessary error but i like it
                 // Update Result Notification
                 model.Result = "Error : Cannot Devide By Zero";
             }
@@ -60,8 +63,10 @@ namespace CalcAspMVC.Controllers
                 }
             }
 
-            // Return Json Model
-            return Json(new
+            // Get user session
+            ISession? session = createSession();
+            // Return Json Object
+            return session == null ? DefaultJsonObject(model) : Json(new
             {
                 Expression = model.Expression,
                 Result = model.Result,
@@ -77,8 +82,15 @@ namespace CalcAspMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult MemoryClear([FromBody] Models.CalculatorModel model)
         {
-            // Get User Session
-            ISession session = _httpContextAccessor.HttpContext.Session;
+            // Get user session
+            ISession? session = createSession();
+            // Validate Model
+            if (model == null)
+                return DefaultJsonObject();
+            // Validate session
+            if (session == null)
+                return DefaultJsonObject(model);
+
             // Get float list from user session
             List<float> memoryStore = session.GetList();
 
@@ -115,8 +127,15 @@ namespace CalcAspMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult MemoryRecal([FromBody] Models.CalculatorModel model)
         {
-            // Get User Session
-            ISession session = _httpContextAccessor.HttpContext.Session;
+            // Get user session
+            ISession? session = createSession();
+            // Validate Model
+            if (model == null)
+                return DefaultJsonObject();
+            // Validate session
+            if (session == null)
+                return DefaultJsonObject(model);
+
             // Get Memory List from User Session
             List<float> memoryStore = session.GetList();
 
@@ -142,8 +161,15 @@ namespace CalcAspMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult MemoryStore([FromBody] Models.CalculatorModel model)
         {
-            // Get User Session
-            ISession session = _httpContextAccessor.HttpContext.Session;
+            // Get user session
+            ISession? session = createSession();
+            // Validate Model
+            if (model == null)
+                return DefaultJsonObject();
+            // Validate session
+            if (session == null)
+                return DefaultJsonObject(model);
+
             // Get Memory List from User Session
             List<float> memoryStore = session.GetList();
 
@@ -152,15 +178,13 @@ namespace CalcAspMVC.Controllers
                 // Get expression with all calculations from the display (model)
                 string expression = model.Expression;
 
-                // Check if string not empty
+                // Check if expression string not empty
                 if (!string.IsNullOrEmpty(expression))
                 {
                     // Remove all operators from expession
                     string[] operators = new string[] { "*", "+", "-", "/" };
                     foreach (string op in operators)
-                    {
                         expression = expression.Replace(op, " ");
-                    }
 
                     // Breakup all numbers and operatorions
                     string[] expressionArray = expression.Split(new char[0]);
@@ -193,8 +217,15 @@ namespace CalcAspMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult MemoryAdd([FromBody] Models.CalculatorModel model)
         {
-            // Get User Session
-            ISession session = _httpContextAccessor.HttpContext.Session;
+            // Get user session
+            ISession? session = createSession();        
+            // Validate Model
+            if (model == null)
+                return DefaultJsonObject();
+            // Validate session
+            if (session == null)
+                return DefaultJsonObject(model);
+
             // Get Memory List from User Session
             List<float> memoryStore = session.GetList();
 
@@ -203,17 +234,15 @@ namespace CalcAspMVC.Controllers
                 // Get expression with all calculations from the display (model)
                 string expression = model.Expression;
 
-                // Check if string not empty
+                // Check if expression is not empty
                 if (!string.IsNullOrEmpty(expression))
                 {
                     // Remove Operators from Expression
                     string[] operators = new string[] { "*", "+", "-", "/" };
                     foreach (string op in operators)
-                    {
                         expression = expression.Replace(op, " ");
-                    }
 
-                    // Breakup all numbers and operatorions
+                    // Breakup all numbers and operations
                     string[] expressionArray = expression.Split(new char[0]);
                     // Get the last number from the expressionArray (if any)
                     float lastDigit = expressionArray.Length > 0 ?
@@ -227,9 +256,7 @@ namespace CalcAspMVC.Controllers
                         int index = memoryStore.Count - 1;
                         // Try parsing Memory Index from model if found
                         if(!string.IsNullOrEmpty(model.MemoryIndex))
-                        {
                             int.TryParse(model.MemoryIndex, out index);
-                        }
 
                         // Update Memory Store
                         memoryStore[index] += lastDigit;
@@ -258,8 +285,15 @@ namespace CalcAspMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult MemorySubstract([FromBody] Models.CalculatorModel model)
         {
-            // Get User Session
-            ISession session = _httpContextAccessor.HttpContext.Session;
+            // Get user session
+            ISession? session = createSession();
+            // Validate Model
+            if (model == null)
+                return DefaultJsonObject();
+            // Validate session
+            if (session == null)
+                return DefaultJsonObject(model);
+
             // Get Memory List from User Session
             List<float> memoryStore = session.GetList();
 
@@ -274,9 +308,7 @@ namespace CalcAspMVC.Controllers
                     // Remove Operators from Expression
                     string[] operators = new string[] { "*", "+", "-", "/" };
                     foreach (string op in operators)
-                    {
                         expression = expression.Replace(op, " ");
-                    }
 
                     // Breakup all numbers and operatorions
                     string[] expressionArray = expression.Split(new char[0]);
@@ -292,9 +324,7 @@ namespace CalcAspMVC.Controllers
                         int index = memoryStore.Count - 1;
                         // Try parsing Memory Index from model if found
                         if (!string.IsNullOrEmpty(model.MemoryIndex))
-                        {
                             int.TryParse(model.MemoryIndex, out index);
-                        }
 
                         // Update Memory Store
                         memoryStore[index] -= lastDigit;
@@ -326,12 +356,65 @@ namespace CalcAspMVC.Controllers
         private bool IsDividingByZero(string expression)
         {
             // Check expression for value
-            if(expression == null)
+            if(string.IsNullOrEmpty(expression))
                 return false;
 
             // Regular expression to detect division by zero
             string pattern = @"(/0+(\.0+)?)(?![0-9\.])";
             return Regex.IsMatch(expression, pattern);
+        }
+
+        private ISession? createSession()
+        {
+            // Get HttpContext
+            HttpContext? httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext == null)
+            {
+                // No user session could be created
+                // No data could be retrieved
+                // Return default Json Model
+                return null;
+            }
+
+            // Return the user session
+            return httpContext.Session;
+        }
+
+        #endregion
+
+        #region Json Objects
+
+        private JsonResult DefaultJsonObject(Models.CalculatorModel model)
+        {
+            if (model == null)
+            {
+                // No user session could be created
+                // Return default Json Model
+                return DefaultJsonObject();
+            }
+            else
+            {
+                // No user session could be created
+                // Return default Json Model
+                return Json(new
+                {
+                    Expression = model.Expression,
+                    Result = model.Result,
+                    Calculations = new List<float>()
+                });
+            }
+        }
+
+        private JsonResult DefaultJsonObject()
+        {
+            // No user session could be created
+            // Return default Json Model
+            return Json(new
+            {
+                Expression = "",
+                Result = "",
+                Calculations = new List<float>()
+            });
         }
 
         #endregion
