@@ -14,12 +14,12 @@
 
    <div class="calc">
 
-        <div class="d-flex justify-content-between bd-highlight mb-3">
+        <div class="d-flex justify-content-between bd-highlight">
             <div class="p-2 bd-highlight"><h3>Calculator</h3></div>
             <div class="p-2 bd-highlight align-self-center">
                 <div class="form-check form-switch fs-3">
-                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
-                    <label id="themeLbl" class="form-check-label" for="flexSwitchCheckChecked">THEME</label>
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchBtn">
+                    <label id="themeLbl" class="form-check-label" for="switchBtn">THEME</label>
                 </div>
             </div>
         </div>
@@ -69,9 +69,11 @@
                 <div class="btn-group d-flex" role="group">
                     <button type="button" class="btn btn-light border" onclick="addToDisplay('0')">0</button>
                     <button type="button" class="btn btn-light border" onclick="addToDisplay('.')">.</button>
-                    @* <button type="button" class="btn btn-light border popupBtn" onclick="removeFromDisplay()"><i class="bi bi-backspace fa-xs" style="font-size:24px;"></i></button> *@
+                    <button type="button" class="btn btn-light border popupBtn" onclick="removeFromDisplay()"><i class="bi bi-backspace" style="font-size:24px;"></i></button>
+                </div>
+                <div class="btn-group d-flex" role="group">
                     <button type="button" class="btn equal border" data-action="Calculate">=</button>
-                </div>       
+                </div>      
             </div>
           
         </form>
@@ -94,7 +96,6 @@
                 </button>
             </div>
             <div class="modal-body">
-
                 <ul class="list-group list" id="memory-list">
                     <!-- Memory list items will be added here by JavaScript -->
                 </ul>
@@ -123,7 +124,7 @@
     });
 
     // On Switch button click
-    $('#flexSwitchCheckChecked').change(function () {
+    $('#switchBtn').change(function () {
         
         // Toggle calculator theme(s)
         if ($(this).prop('checked') == true) {
@@ -134,29 +135,40 @@
         }
     });
 
+    // Click Event for closing memoryModal
+    $('#closeModal').click(function () {
+        hideMemory();
+    });
+
+
+    // Clear Display
+    function clearDisplay() {
+        // Update display with an empty string
+        $("#display").val("");
+        // Remove any error notifications
+        removeErrorNotification();
+    }
+
     // Add Digits & Operators to Display
     function addToDisplay(value) {
 
-        var isVisible = $('#result').is(':visible');
-        // Remove previous errors
-        if (isVisible) {
-            $("#display").val("");
-            $("#result").text("");
-        }
+        // Check if error notifications are being shown
+        removeErrorNotification()
        
-        // Finish missing parentheses
-        value = validateParentheses(value);
-       
-        // Validate our new input value
-        if (validateInput(value)) {
-            // Update Expression in display
-            $("#display").val(
-                $("#display").val() + value
-            );
-        }
+        // Handle input value
+        if (value) {
 
-        $('#result').hide();
-        
+            // Finish missing parentheses
+            value = validateParentheses(value);
+
+            // Validate our new input value
+            if (validateInput(value)) {
+                // Update Expression in display
+                $("#display").val(
+                    $("#display").val() + value
+                );
+            }
+        } 
     }
 
     // Remove last digit from Display
@@ -164,22 +176,38 @@
 
         // Get value from display
         var str = $("#display").val();
-        // Remove last charactor from string
-        str = str.substring(0, str.length - 1);
-        // Update display
-        $("#display").val(str);
 
+        if (str) {        
+            // Remove last charactor from string
+            str = str.substring(0, str.length - 1);
+            // Update display
+            $("#display").val(str);
+        }
+    }
+
+    // Remove error notifications 
+    function removeErrorNotification()
+    {
+        // Check if error notifications are being shown
+        var isVisible = $('#result').is(':visible');
+        // Remove previous errors
+        if (isVisible) {
+            $("#display").val("");
+            $("#result").text("");
+            $('#result').hide();
+        }
+    }
+
+    // Show error notification
+    function showErrorNotification(message) {
+        $('#result').text(message);
+        $('#result').show();
     }
 
 
 </script>
 
 <script>
-
-    // Click Event for closing memoryModal
-    $('#closeModal').click(function () {
-        hideMemory();
-    });
 
     // Create Button click event
     $('button').click(function (e) {
@@ -199,13 +227,16 @@
 
         // Get action from form button (if any)
         var action = control.data('action');
-        // Create a POST url using based the users action
-        let url = '@Url.Action("PlaceHolder", "Calculator")'.replace('PlaceHolder', action);
+        // Terminate function if no action was assigned
         if (action == null) {
             return;
         }
 
-        // Throw in seperate event
+        // Create POST url using the users action
+        var url = '@Url.Action("PlaceHolder", "Calculator")'.replace('PlaceHolder', action);
+     
+        // TODO : Throw in seperate event
+        // Close Open Parentheses
         if (action == "Calculate") {
             validateCloseParentheses();
         }
@@ -229,18 +260,23 @@
             },
             data: JSON.stringify(model),
             success: function (response) {
-                // Update display
-                $("#display").val(response.expression);
-                // Update/Populate the memodyModal
-                updateMemoryList(response.calculations.reverse());
 
-                // Show Error Alert when result is not empty
-                if (response.result != "") {
-                    $('#result').text(response.result);
-                    $('#result').show();
-                }
-                else {
-                    $('#result').hide();
+                if (response) {
+
+                    // Update display with response data
+                    $("#display").val(response.expression);
+
+                    // Handle response for memory list
+                    if (response.calculations) {
+                        // Update/Populate the memodyModal
+                        // Reverse array so last result are shown on top
+                        updateMemoryList(response.calculations.reverse());
+                    }
+
+                    // Show Error Alert if any
+                    if (response.result) {
+                        showErrorNotification(response.result);
+                    }
                 }
             },
             error: function (xhr, status, error) {

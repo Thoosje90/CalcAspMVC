@@ -3,11 +3,6 @@
 
 
 
-// Clear Display
-function clearDisplay() {
-    $("#display").val("");
-}
-
 // Switch Calculator Theme
 function switchTheme(value) {
     // Update body class
