@@ -255,8 +255,10 @@ namespace CalcAspMVC.Controllers
                         // Get last item index
                         int index = memoryStore.Count - 1;
                         // Try parsing Memory Index from model if found
-                        if(!string.IsNullOrEmpty(model.MemoryIndex))
+                        if (!string.IsNullOrEmpty(model.MemoryIndex))
+                        {
                             int.TryParse(model.MemoryIndex, out index);
+                        }
 
                         // Update Memory Store
                         memoryStore[index] += lastDigit;
@@ -353,17 +355,6 @@ namespace CalcAspMVC.Controllers
 
         #region Helping Methods
 
-        private bool IsDividingByZero(string expression)
-        {
-            // Check expression for value
-            if(string.IsNullOrEmpty(expression))
-                return false;
-
-            // Regular expression to detect division by zero
-            string pattern = @"(/0+(\.0+)?)(?![0-9\.])";
-            return Regex.IsMatch(expression, pattern);
-        }
-
         private ISession? createSession()
         {
             // Get HttpContext
@@ -378,6 +369,17 @@ namespace CalcAspMVC.Controllers
 
             // Return the user session
             return httpContext.Session;
+        }
+
+        private bool IsDividingByZero(string expression)
+        {
+            // Check expression for value
+            if (string.IsNullOrEmpty(expression))
+                return false;
+
+            // Regular expression to detect division by zero
+            string pattern = @"(/0+(\.0+)?)(?![0-9\.])";
+            return Regex.IsMatch(expression, pattern);
         }
 
         #endregion
